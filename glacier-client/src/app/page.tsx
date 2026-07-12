@@ -175,6 +175,36 @@ export default function Home() {
         };
     }, []);
 
+    useEffect(() => {
+        const handleStorage = (e) => {
+            // Lock OS to tahoe
+            if (e.key === 'os' && e.newValue !== 'tahoe') {
+                window.localStorage.setItem('os', 'tahoe');
+            }
+            // Remove any custom theme
+            if (e.key === 'custom-theme' && e.newValue !== null) {
+                window.localStorage.removeItem('custom-theme');
+            }
+            // Lock background to our image
+            if (e.key === 'background' && e.newValue !== '/image/bismuth_wallpaper.webp') {
+                window.localStorage.setItem('background', '/image/bismuth_wallpaper.webp');
+                document.body.style.backgroundImage = `url('/image/bismuth_wallpaper.webp')`;
+            }
+        };
+
+        // Initial setup
+        window.localStorage.setItem('os', 'tahoe');
+        window.localStorage.removeItem('custom-theme');
+        window.localStorage.setItem('background', '/image/bismuth_wallpaper.webp');
+        document.body.style.backgroundImage = `url('/image/bismuth_wallpaper.webp')`;
+
+        window.addEventListener('storage', handleStorage);
+        return () => {
+            window.removeEventListener('storage', handleStorage);
+        };
+    }, []);
+
+
     return (
         <>
             <FluentProvider theme={webDarkTheme}>

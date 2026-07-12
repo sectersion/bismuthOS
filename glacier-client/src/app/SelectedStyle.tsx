@@ -3,21 +3,25 @@
 import { useEffect, useState } from "react";
 
 export default function SelectedStyle() {
-    const [selOS, setSelOS] = useState("windows");
-    useEffect(()=>{
-        const os = window.localStorage.getItem("os");
-        const customtheme = window.localStorage.getItem("custom-theme");
-        if(customtheme) {
-            setSelOS("windows");
-            return;
-        }
-        if (os) {
-            setSelOS(os);
-        }else {
-            window.localStorage.setItem("os", "windows");
-            setSelOS("windows");
-        }
-    },[]);
+    const [selOS, setSelOS] = useState("tahoe");
+    useEffect(() => {
+        // Ensure localStorage is set to our values
+        window.localStorage.setItem('os', 'tahoe');
+        window.localStorage.removeItem('custom-theme');
+        const handleStorage = (e) => {
+            if (e.key === 'os' && e.newValue !== 'tahoe') {
+                window.localStorage.setItem('os', 'tahoe');
+                setSelOS('tahoe');
+            }
+            if (e.key === 'custom-theme' && e.newValue !== null) {
+                window.localStorage.removeItem('custom-theme');
+            }
+        };
+        window.addEventListener('storage', handleStorage);
+        return () => {
+            window.removeEventListener('storage', handleStorage);
+        };
+    }, []);
 
     return (
         <>
