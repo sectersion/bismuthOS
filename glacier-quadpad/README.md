@@ -1,1 +1,0 @@
-Quadpad only edition
